@@ -4,16 +4,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
-
-//Load input validation
-const validateRegisterInput = require('../../validation/register');
-
 //Load configs
 const Keys = require('../../config/keys');
 //Load user model
 const User = require('../../models/User');
 
-
+//Load input validation
+const validateRegisterInput = require('../../validation/register');
 
 // @route GET   api/users/test
 // @desc        Test users route
@@ -26,18 +23,20 @@ router.get('/test', (req, res) => res.json({msg: "users works!"}));
 // @access      public
 router.post('/register', (req, res) =>{
 
-    const { errors, isValid } = validateRegisterInput(req.body);
+    const {errors, isValid} = validateRegisterInput(req.body);
+
 
     //Check validation
     if(!isValid){
-        return res.status(400).json();
+        return res.status(400).json(errors);
     }
 
     User.findOne({
         email: req.body.email
     }).then(user =>{
         if(user){
-            return res.status(400).json({email: 'Email already exists!'});
+            errors.email = 'Email already exists';
+            return res.status(400).json(errors);
         }else{
             const newUser = new User({
                 name: req.body.name,
@@ -48,7 +47,9 @@ router.post('/register', (req, res) =>{
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
                     if(err) throw err;
                     newUser.password = hash;
-                    newUser.save().then(user => res.json(user)).catch(err => console.log(err)); 
+                    newUser.save()
+                        .then(user => res.json(user))
+                        .catch(err => console.log(err)); 
                 })
              });
         }
@@ -62,7 +63,8 @@ router.post('/login', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    User.findOne({email}).then(user => {
+    User.findOne({email})
+        .then(user => {
         //Check if user exists
         if(!user){
             res.status(404).json({email: 'User not found'});
