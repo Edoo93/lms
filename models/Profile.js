@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 const ProfileSchema = new Schema({
     user:{
         type: Schema.Types.ObjectId,
-        ref: 'profile'
+        ref: 'users'
     },
     handle: {
         type: String,
@@ -44,10 +44,6 @@ const ProfileSchema = new Schema({
             },
             from: {
                 type: Date,
-                required: true
-            },
-            date:{
-              type: Date,  
             },
             location: {
                 type: String,   
@@ -67,9 +63,8 @@ const ProfileSchema = new Schema({
                 type: String,
                 required: true
             },
-            from: {
+            fromm: {
                 type: Date,
-                required: true
             },
             to: {
               type: Date,  
@@ -77,7 +72,7 @@ const ProfileSchema = new Schema({
             current: {
                 type: String,   
             },
-            description: {
+            descr: {
                 type: String
             }
         },
@@ -104,4 +99,4 @@ const ProfileSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('profile', ProfileSchema);
+module.exports = mongoose.model('profiles', ProfileSchema);

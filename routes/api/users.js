@@ -18,7 +18,7 @@ const validateRegisterInput = require('../../validation/register');
 router.get('/test', (req, res) => res.json({msg: "users works!"}));
 
 
-// @route GET   api/users/registration
+// @route       POIST api/users/registration
 // @desc        register users
 // @access      public
 router.post('/register', (req, res) =>{
